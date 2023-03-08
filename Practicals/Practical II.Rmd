@@ -103,7 +103,29 @@ Most means are roughly equal, except the mean of `tv`, which is much lower in th
 
 Investigating univariate properties by using functions such as `summary()`, may not be ideal in the case of hundreds of variables. To extract just the information you need, for all imputed datasets, we can make use of the `with()` function. To obtain summaries for each imputed `tv` only, type
 ```{r}
-summary(with(imp1, mean(tv)))
+# CF: not working when tried on 3/8/2023
+# summary(with(imp1, mean(tv)))
+# CF: my version that seems to work
+lapply(with(imp1, tv)$analyses, mean)
+```
+
+This just returns means of imputed values. Does not include the original data. 
+
+```{r}
+colMeans(imp1$imp$tv)
+```
+
+CF: mean of `tv` within the 5 imputed data sets using complete data.
+
+```{r}
+dslist <- complete(imp1, "all", include = FALSE)
+lapply(dslist, function(x)mean(x[["tv"]]))
+```
+
+CF: `summary()` of tv in the 5 imputed data sets
+
+```{r}
+lapply(dslist, function(x)summary(x[["tv"]]))
 ```
 
 
